@@ -1,0 +1,12 @@
+flask
+flask_migrate
+flask_login
+flask_wtf
+flask_sqlalchemy
+flask_Moment
+flask_script
+wtforms
+werkzeug
+ipython
+pytest
+pytest-flask
