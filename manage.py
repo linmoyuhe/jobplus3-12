@@ -1,5 +1,5 @@
 from app.app import create_app
-from urllib
+import urllib
 
 
 app = create_app('development')
