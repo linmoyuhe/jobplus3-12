@@ -1,15 +1,20 @@
 class BaseConfig(object):
-	SECRET_KEY = 'OENDA YOUWILLBE A AMAZING PYTHONENGINEER'
+	SECRET_KEY = 'wubba lubba dub dub'
+	DOMAIN_NAME = 'root@localhost'
+	PORT = '3306'
+
 
 class DevelopementConfig(BaseConfig):
-	DEBUG=True
-	SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:wangyi@localhost:3306/jobplus?charset=utf8'
+	DEBUG = True
+	SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://' + DOMAIN_NAME + ':' + PORT + '/jobplus?charset=utf8'
+
 
 class ProductionConfig(BaseConfig):
-	DEBUG=False
+	DEBUG = False
+
 
 class TestingConfig(BaseConfig):
-	DEBUG=False
+	DEBUG = False
 
 
 configs = {

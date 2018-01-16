@@ -1,7 +1,9 @@
 from app.app import create_app
 from urllib
 
+
 app = create_app('development')
+
 
 @app.cli.command()
 def routes():
@@ -16,6 +18,7 @@ def routes():
 
     for line in sorted(output):
         print(line)
+
 
 if __name__ == '__main__':
     app.run()
