@@ -33,9 +33,10 @@ class User(Base, UserMixin):
 	_password = db.Column('password', db.String(256), nullable=False)
 	role = db.Column(db.SmallInteger, default=ROLE_USER)
 	photo = db.Column(db.String(256))
-	website = db.Column(db.String(256))
 	description = db.Column(db.String(256))
 	city = db.Column(db.String(24))
+	# 普通用户对应简历url 企业用户对应公司网址
+	extra_url = db.Column(db.String(256))
 	# 普通用户特有字段(用于拓展删选job)
 	work_year = db.Column(db.Integer, default=0)
 	expected_salary = db.Column(db.SmallInteger)
