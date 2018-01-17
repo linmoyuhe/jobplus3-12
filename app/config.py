@@ -2,6 +2,7 @@
 DOMAIN_NAME = 'root@localhost'
 PORT = '3306'
 
+
 class BaseConfig(object):
 	SECRET_KEY = 'wubba lubba dub dub'
 

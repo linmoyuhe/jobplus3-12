@@ -39,7 +39,7 @@ class User(Base, UserMixin):
 	# 普通用户特有字段(用于拓展删选job)
 	work_year = db.Column(db.Integer, default=0)
 	expected_salary = db.Column(db.SmallInteger)
-	education = db.Column(db.SmallInteger)
+	education = db.Column(db.SmallInteger, default=EDUCATION_DEFAULT)
 	# 企业用户特有字段(一对多的关系)
 	jobs = db.relationship('Job')
 
@@ -80,9 +80,11 @@ class Job(Base):
 	description = db.Column(db.String(256))
 	# 用于拓展删选job
 	min_salary = db.Column(db.SmallInteger, nullable=False)
-	max_salary = db.Column(db.SmallInteger, nullable=False)	
+	max_salary = db.Column(db.SmallInteger, nullable=False)
+  min_year_require = db.Column(db.SmallInteger)
+  max_year_require = db.Column(db.SmallInteger)
 	city = db.Column(db.String(24))
-	education_require =  db.Column(db.SmallInteger)
+	education_require =  db.Column(db.SmallInteger, default=EDUCATION_DEFAUL)
 	# 职位 与 企业 是一对一的关系
 	company = db.relationship('User', uselist=False)
 	
