@@ -81,10 +81,10 @@ class Job(Base):
 	# 用于拓展删选job
 	min_salary = db.Column(db.SmallInteger, nullable=False)
 	max_salary = db.Column(db.SmallInteger, nullable=False)
-  min_year_require = db.Column(db.SmallInteger)
-  max_year_require = db.Column(db.SmallInteger)
+  	min_year_require = db.Column(db.SmallInteger)
+  	max_year_require = db.Column(db.SmallInteger)
 	city = db.Column(db.String(24))
-	education_require =  db.Column(db.SmallInteger, default=EDUCATION_DEFAUL)
+	education_require =  db.Column(db.SmallInteger, default=EDUCATION_DEFAULT)
 	# 职位 与 企业 是一对一的关系
 	company = db.relationship('User', uselist=False)
 	
