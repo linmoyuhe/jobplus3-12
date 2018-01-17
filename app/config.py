@@ -1,7 +1,10 @@
+# 域名 和 端口 可根据个人环境改变
+DOMAIN_NAME = 'root@localhost'
+PORT = '3306'
+
+
 class BaseConfig(object):
 	SECRET_KEY = 'wubba lubba dub dub'
-	DOMAIN_NAME = 'root@localhost'
-	PORT = '3306'
 
 
 class DevelopementConfig(BaseConfig):

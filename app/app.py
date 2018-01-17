@@ -1,8 +1,8 @@
 from flask import Flask, render_template
 from flask_migrate import Migrate
 from flask_login import LoginManager
-from app.config import configs
-from app.models import db, User
+from config import configs
+from models import db, User
 
 
 def register_extensions(app):
