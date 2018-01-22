@@ -1,0 +1,7 @@
+{% extends "company/admin.html" %}
+{% from "macros.html" import render_form %}
+
+{% block admin %}
+<h4>企业信息</h4>
+<div class="form-profile">{{ render_form(form, url_for('company.profile')) }}</div>
+{% endblock %}
