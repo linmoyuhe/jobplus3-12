@@ -13,36 +13,24 @@ class Base(db.Model):
 	update_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 
+# 登录用户
 class User(Base, UserMixin):
 	__tablename__ = 'user'
 
-	ROLE_USER = 10
+	# 求职者
+	ROLE_CANDIDATE = 10
+	# 招聘企业
 	ROLE_COMPANY = 20
+	# 管理员
 	ROLE_ADMIN = 30
 
-	EDUCATION_DEFAULT = 0
-	EDUCATION_COLLEGE_BELOW = 10
-	EDUCATION_COLLEGE = 20
-	EDUCATION_COLLEGE_ABOVE = 30
-
-	# 普通用户 和 企业用户 共有字段
 	id = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.String(32), unique=True, index=True, nullable=False)
 	email = db.Column(db.String(64), unique=True, index=True, nullable=False)
 	moblie = db.Column(db.Integer, unique=True, index=True, nullable=False)
 	_password = db.Column('password', db.String(256), nullable=False)
-	role = db.Column(db.SmallInteger, default=ROLE_USER)
-	photo = db.Column(db.String(256))
-	description = db.Column(db.String(256))
-	city = db.Column(db.String(24))
-	# 普通用户对应简历url 企业用户对应公司网址
-	extra_url = db.Column(db.String(256))
-	# 普通用户特有字段(用于拓展删选job)
-	work_year = db.Column(db.Integer, default=0)
-	expected_salary = db.Column(db.SmallInteger)
-	education = db.Column(db.SmallInteger, default=EDUCATION_DEFAULT)
-	# 企业用户特有字段(一对多的关系)
-	jobs = db.relationship('Job')
+	# 登录用户类别
+	role = db.Column(db.SmallInteger, default=ROLE_CANDIDATE)
 
 	def __repr__(self):
 		return "<User:{}>".format(self.username)
@@ -66,29 +54,156 @@ class User(Base, UserMixin):
 	def is_company():
 		return self.role == self.ROLE_COMPANY
 
+	@property
+	def is_candidate():
+		return self.role == self.ROLE_CANDIDATE
 
+
+# 求职者-与登录用户是一对一的关系
+class Candidate(Base):
+	__tablename__ = 'candidate'
+
+	# 学历不限
+	EDUCATION_NO_lIMITED = 0
+	# 本科以下
+	EDUCATION_COLLEGE_BELOW = 10
+	# 本科
+	EDUCATION_COLLEGE = 20
+	# 硕士
+	EDUCATION_MASTER = 30
+	# 博士
+	EDUCATION_PHD = 40
+
+	id = db.Column(db.Integer, primary_key=True)
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
+	# 姓名
+	name = db.Column(db.String(32), index=True, nullable=False)
+	# 头像
+	photo = db.Column(db.String(256))
+	# 介绍
+	intro = db.Column(db.String(256))
+	# 城市
+	city = db.Column(db.String(24))
+	# 简历url
+	cv_url = db.Column(db.String(256))
+	# 工作年龄
+	work_year = db.Column(db.Integer, default=0)
+	# 期望薪资(单位：K)
+	expected_salary = db.Column(db.SmallInteger)
+	# 教育
+	education = db.Column(db.SmallInteger, default=EDUCATION_NO_lIMITED)
+	# 对应登录用户
+	user = db.relationship('User', uselist=False, brckref='candidate')
+
+	def __repr__(self):
+		return "<Candidate:{}>".format(self.name)
+
+
+# 企业-与登录用户是一对一的关系
+class Company(Base):
+	__tablename__ = 'comnpany'
+
+	id = db.Column(db.Integer, primary_key=True)
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
+	# 名称
+	name = db.Column(db.String(32), index=True, nullable=False)
+	# logo
+	photo = db.Column(db.String(256))
+	# 介绍
+	intro = db.Column(db.String(256))
+	# 城市
+	city = db.Column(db.String(24))
+	# 官网
+	website = db.Column(db.String(256))
+	# 福利
+	welfares = db.Column(db.String(256))
+	# 对应登录用户
+	user = db.relationship('User', uselist=False, brckref='company')
+
+	def __repr__(self):
+		return "<Company:{}>".format(self.name)
+
+
+# 职位
 class Job(Base):
 	__tablename__ = 'job'
 
-	EDUCATION_DEFAULT = 0
+	# 学历不限
+	EDUCATION_NO_lIMITED = 0
+	# 本科以下
 	EDUCATION_COLLEGE_BELOW = 10
+	# 本科
 	EDUCATION_COLLEGE = 20
-	EDUCATION_COLLEGE_ABOVE = 30
+	# 硕士
+	EDUCATION_MASTER = 30
+	# 博士
+	EDUCATION_PHD = 40
 
 	id = db.Column(db.Integer, primary_key=True)
+	# 职位名称
 	name = db.Column(db.String(32), index=True, nullable=False)
-	requirements = db.Column(db.String(256))
+	# 职位描述
 	description = db.Column(db.String(256))
-	# 用于拓展删选job
-	min_salary = db.Column(db.SmallInteger, nullable=False)
-	max_salary = db.Column(db.SmallInteger, nullable=False)
-  	min_year_require = db.Column(db.SmallInteger)
-  	max_year_require = db.Column(db.SmallInteger)
+	# 职位要求
+	requirements = db.Column(db.String(256))
+	# 职位标签，多个用逗号隔开，最多10个
+	tags = db.Column(db.String(128))
+	# 所在城市
 	city = db.Column(db.String(24))
-	education_require =  db.Column(db.SmallInteger, default=EDUCATION_DEFAULT)
-	# 职位 与 企业 是一对一的关系
-	company = db.relationship('User', uselist=False)
+	# 最小薪资(单位：K)
+	min_salary = db.Column(db.SmallInteger, nullable=False)
+	# 最大薪资(单位：K)
+	max_salary = db.Column(db.SmallInteger, nullable=False)
+	# 工作年限要求(0为不限)
+  	work_year_require = db.Column(db.SmallInteger)
+	# 教育要求(默认不限)
+	education_require =  db.Column(db.SmallInteger, default=EDUCATION_NO_lIMITED)
+	# 企业 与 职位 是一对多的关系
+	company_id = db.Column(db.Integer, db.ForeignKey('company.id', ondelete='CASCADE'))
+	# backref：反向引用，相当于给Company表动态的添加jobs字段对应其所含有的Job实例
+	# dynamic：用于一对多或多对多的关系中，访问属性后并不会直接返回结果，而是返回一个query对象，需要执行相应方法才可获取对象
+	company = db.relationship('Company', uselist=False, brckref=db.backref('jobs', lazy='dynamic'))
+	# 查看人数
+	view_count = db.Column(db.Integer, default=0)
+	# 是否正在招聘
+	is_open = db.Column(db.Boolean, default=True)
 	
 	def __repr__(self):
 		return "<Job:{}>".format(self.name)
 
+	@property
+	def tag_list(self):
+		return self.tags.split(',')
+
+
+# 投递
+class Delivery(Base):
+	__tablename__ = 'delivery'
+
+	# 等待企业审核
+	STATUS_WAITTING = 1
+	# 被拒绝
+	STATUS_REJECT = 2
+	# 被接受
+	STATUS_ACCEPT = 3
+
+	id = db.Column(db.Integer, primary_key=True)
+	job_id = db.Column(db.Integer, db.ForeignKey('job.id', ondelete='SET NULL'))
+	candidate_id = db.Column(db.Integer, db.ForeignKey('candidate.id', ondelete='SET NULL'))
+	comnpany_id = db.Column(db.Integer, db.ForeignKey('conpany.id', ondelete='SET NULL'))
+	# 投递状态
+	status = db.Column(db.SmallInteger, default=STATUS_WAITTING)
+	# 企业回应
+	response = db.Column(db.String(256))
+
+	@property
+	def job(self):
+		return Job.query.get(self.job_id)
+
+	@property
+	def candidate(self):
+		return Candidate.query.get(self.candidate_id)
+
+	@property
+	def company(self):
+		return Company.query.get(self.comnpany_id)
