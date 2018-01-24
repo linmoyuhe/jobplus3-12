@@ -1,2 +1,23 @@
 {% extends "base.html" %}
-index
+{% from "macros.html" import render_pagination %}
+
+{% block title %}首页{% endblock %}
+
+{% block body %}
+<div class="row">
+	{% for job in pagination.items %}
+  	<div class="col-sm-6 col-md-4 course">
+    	<div class="thumbnail">
+    	<a href="#" target="_blank">
+	        <div class="caption">
+	            <h4 class="job_name">{{ job.name }}</h4>
+	            <p class="job_city">{{ job.city }}</p>
+	        </div>
+      	</a>
+   		</div>
+  	</div>
+  	{% endfor %}
+</div>
+
+{{ render_pagination(pagination, 'front.index') }}
+{% endbody %}

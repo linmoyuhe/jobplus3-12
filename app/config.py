@@ -5,6 +5,7 @@ PORT = '3306'
 
 class BaseConfig(object):
 	SECRET_KEY = 'wubba lubba dub dub'
+	INDEX_PER_PAGE = 9
 
 
 class DevelopementConfig(BaseConfig):

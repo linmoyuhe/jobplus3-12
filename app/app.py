@@ -1,8 +1,8 @@
 from flask import Flask, render_template
 from flask_migrate import Migrate
 from flask_login import LoginManager
-from config import configs
-from models import db, User
+from app.config import configs
+from app.models import db, User
 
 
 def register_extensions(app):
@@ -19,7 +19,7 @@ def register_extensions(app):
 
 
 def register_blueprints(app):
-    from .handlers improt front, job, company, user, admin
+    from .handlers import front, job, company, user, admin
     app.register_blueprint(front)
     app.register_blueprint(job)
     app.register_blueprint(company)

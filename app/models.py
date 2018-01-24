@@ -27,7 +27,7 @@ class User(Base, UserMixin):
 	id = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.String(32), unique=True, index=True, nullable=False)
 	email = db.Column(db.String(64), unique=True, index=True, nullable=False)
-	moblie = db.Column(db.Integer, unique=True, index=True, nullable=False)
+	phone = db.Column(db.Integer, unique=True, index=True, nullable=False)
 	_password = db.Column('password', db.String(256), nullable=False)
 	# 登录用户类别
 	role = db.Column(db.SmallInteger, default=ROLE_CANDIDATE)
@@ -93,7 +93,7 @@ class Candidate(Base):
 	# 教育
 	education = db.Column(db.SmallInteger, default=EDUCATION_NO_lIMITED)
 	# 对应登录用户
-	user = db.relationship('User', uselist=False, brckref='candidate')
+	user = db.relationship('User', uselist=False, backref='candidate')
 
 	def __repr__(self):
 		return "<Candidate:{}>".format(self.name)
@@ -118,7 +118,7 @@ class Company(Base):
 	# 福利
 	welfares = db.Column(db.String(256))
 	# 对应登录用户
-	user = db.relationship('User', uselist=False, brckref='company')
+	user = db.relationship('User', uselist=False, backref='company')
 
 	def __repr__(self):
 		return "<Company:{}>".format(self.name)
@@ -155,21 +155,20 @@ class Job(Base):
 	# 最大薪资(单位：K)
 	max_salary = db.Column(db.SmallInteger, nullable=False)
 	# 工作年限要求(0为不限)
-  	work_year_require = db.Column(db.SmallInteger)
+	work_year_require = db.Column(db.SmallInteger)
 	# 教育要求(默认不限)
 	education_require =  db.Column(db.SmallInteger, default=EDUCATION_NO_lIMITED)
 	# 企业 与 职位 是一对多的关系
 	company_id = db.Column(db.Integer, db.ForeignKey('company.id', ondelete='CASCADE'))
 	# backref：反向引用，相当于给Company表动态的添加jobs字段对应其所含有的Job实例
 	# dynamic：用于一对多或多对多的关系中，访问属性后并不会直接返回结果，而是返回一个query对象，需要执行相应方法才可获取对象
-	company = db.relationship('Company', uselist=False, brckref=db.backref('jobs', lazy='dynamic'))
+	company = db.relationship('Company', uselist=False, backref=db.backref('jobs', lazy='dynamic'))
 	# 查看人数
 	view_count = db.Column(db.Integer, default=0)
 	# 是否正在招聘
 	is_open = db.Column(db.Boolean, default=True)
 
 	def __repr__(self):
-<<<<<<< HEAD
 		return "<Job:{}>".format(self.name)
 
 	@property
@@ -208,6 +207,3 @@ class Delivery(Base):
 	@property
 	def company(self):
 		return Company.query.get(self.comnpany_id)
-=======
-		return "<Job:{}>".format(self.name)
->>>>>>> fix models
