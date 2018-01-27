@@ -1,12 +1,17 @@
 #coding:utf-8
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, ValidationError, TextAreaField, IntegerField ,SelectField
+<<<<<<< HEAD
 from wtforms.validators import Length, Email, EqualTo, Required, URL, NumberRange, Regexp
+=======
+from wtforms.validators import Length, Email, EqualTo, Required, URL, NumberRange
+>>>>>>> 用户企业首页首页登陆后下拉菜单
 from app.models import db, User, Company, Candidate
 from flask_login import current_user
 from flask import url_for
 
 
+<<<<<<< HEAD
 class LoginForm(FlaskForm):
 	account = StringField('账号(用户名/邮箱/手机号)', validators=[Required(), Length(3, 24)])
 	password = PasswordField('密码', validators=[Required(), Length(6, 24)])
@@ -64,12 +69,18 @@ class RegisterForm(FlaskForm):
 		return user
 
 
+=======
+>>>>>>> 用户企业首页首页登陆后下拉菜单
 class CandidateForm(FlaskForm):
 
 	name = StringField('姓名', validators=[Required(), Length(1, 32)])
 	photo = StringField('照片')
 	work_year = IntegerField('工龄')
+<<<<<<< HEAD
 	city = StringField('所在城市')
+=======
+	city = StringField('住址')
+>>>>>>> 用户企业首页首页登陆后下拉菜单
 	education = SelectField('选择学历',
 		choices=[
 		('不限', '不限'),
@@ -95,7 +106,10 @@ class CandidateForm(FlaskForm):
 		db.session.commit()
 		return user
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 用户企业首页首页登陆后下拉菜单
 class CompanyForm(FlaskForm):
 	"""docstring for CompanyForm"""
 	name = StringField('公司名称', validators=[Required(), Length(1, 128)])

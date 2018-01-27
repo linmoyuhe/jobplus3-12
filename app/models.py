@@ -169,6 +169,7 @@ class Job(Base):
 	is_open = db.Column(db.Boolean, default=True)
 
 	def __repr__(self):
+<<<<<<< HEAD
 		return "<Job:{}>".format(self.name)
 
 	@property
@@ -207,3 +208,6 @@ class Delivery(Base):
 	@property
 	def company(self):
 		return Company.query.get(self.comnpany_id)
+=======
+		return "<Job:{}>".format(self.name)
+>>>>>>> fix models
