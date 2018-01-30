@@ -130,7 +130,7 @@ class Job(Base):
 
 	# 学历不限
 	EDUCATION_NO_lIMITED = 0
-	# 本科以下
+	# 大专
 	EDUCATION_COLLEGE_BELOW = 10
 	# 本科
 	EDUCATION_COLLEGE = 20
@@ -169,7 +169,6 @@ class Job(Base):
 	is_open = db.Column(db.Boolean, default=True)
 
 	def __repr__(self):
-<<<<<<< HEAD
 		return "<Job:{}>".format(self.name)
 
 	@property
@@ -208,6 +207,3 @@ class Delivery(Base):
 	@property
 	def company(self):
 		return Company.query.get(self.comnpany_id)
-=======
-		return "<Job:{}>".format(self.name)
->>>>>>> fix models

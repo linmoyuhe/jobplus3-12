@@ -5,8 +5,10 @@
 		<title>
 		{% block title %}{% endblock %}
 		</title>
+		{% block head_css %}
 		<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
-		{% block head_css %}{% endblock %}
+		<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+		{% endblock %}
 	</head>
 	<body>
 
@@ -20,14 +22,14 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="/">app</a>
+					<a class="navbar-brand" href="/">JobPlus</a>
 				</div>
 
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
-						<li class="active"><a href="#">Home<span class="sr-only">(current)</span></a></li>
-						<li><a href="#">企业</a></li>
-						<li><a href="#">职位</a></li>
+						<li class="{% if active == 'main' %}active{% endif %}"><a href="#">主页<span class="sr-only">(current)</span></a></li>
+						<li class="{% if active == 'job' %}active{% endif %}"><a href="{{ url_for('job.index') }}">职位</a></li>
+						<li class="{% if active == 'company' %}active{% endif %}"><a href="{{ url_for('company.index') }}">企业</a></li>
 						{% if current_user.is_authenticated and current_user.is_admin %}
 						<li><a href="{{ url_for('admin.index') }}">控制台</a></li>
 						{% endif %}
@@ -60,13 +62,34 @@
 			</div>
 		</nav>
 
-		<div class="container">
-		{% block body %}{% endblock %}
-		{% block footer %}{% endblock %}
+		<div class="container-fluid header">
+			{% block head %}{% endblock %}
 		</div>
 
+		<div class="container">
+
+		{% with messages = get_flashed_messages(with_categories=true) %}
+			{% if messages %}
+			{% for category, message in messages %}
+			<div class="alert alert-{{ category }} alert-dismissible" role="alert">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			{{ message }}
+			</div>
+			{% endfor %}
+			{% endif %}
+		{% endwith %}
+
+		{% block body %}{% endblock %}
+
+		{% block footer %}
+			<div class="footer">Copyright © 2018 By LouPlus3-12 Team</div>
+		{% endblock %}
+		</div>
+
+		{% block tail_js %}
 		<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-		{% block tail_js %}{% endblock %}
+		<script src="static/main.js"></script>
+		{% endblock %}
 	</body>
 </html>

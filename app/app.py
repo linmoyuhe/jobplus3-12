@@ -1,8 +1,40 @@
-from flask import Flask, render_template
+from flask import Flask
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from app.config import configs
 from app.models import db, User
+import datetime
+
+
+def register_filters(app):
+
+    @app.template_filter()
+    def timesince(value):
+        now = datetime.datetime.utcnow()
+        diff = now - value
+        if diff.days > 365:
+            return '{}年前'.format(diff.days // 365)
+        if diff.days > 30:
+            return '{}月前'.format(diff.days // 30)
+        if diff.days > 0:
+            return '{}天前'.format(diff.days)
+        if diff.seconds > 3600:
+            return '{}小时前'.format(diff.seconds // 3600)
+        if diff.seconds > 60:
+            return '{}分钟前'.format(diff.seconds // 60)
+        return '刚刚'
+
+    @app.template_filter()
+    def degree_require(value):
+        if value >= 40:
+            return '博士以上'
+        if value >= 30:
+            return '硕士以上'
+        if value >= 20:
+            return '本科以上'
+        if value >= 10:
+            return '大专以上'
+        return '不限'
 
 
 def register_extensions(app):
@@ -33,5 +65,6 @@ def create_app(config):
     
     register_extensions(app) 
     register_blueprints(app)
+    register_filters(app)
      
     return app

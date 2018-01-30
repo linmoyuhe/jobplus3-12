@@ -3,21 +3,41 @@
 
 {% block title %}首页{% endblock %}
 
+{% block head %}
+<div class="jumbotron">
+    <div class="container">
+        <h1>JobPlus</h1>
+        <p>互联网求职、招聘平台</p>
+    </div>
+</div>
+{% endblock %}
+
 {% block body %}
-<div class="row">
-	{% for job in pagination.items %}
-  	<div class="col-sm-6 col-md-4 course">
-    	<div class="thumbnail">
-    	<a href="#" target="_blank">
-	        <div class="caption">
-	            <h4 class="job_name">{{ job.name }}</h4>
-	            <p class="job_city">{{ job.city }}</p>
-	        </div>
-      	</a>
-   		</div>
-  	</div>
-  	{% endfor %}
+<ul class="nav nav-tabs list-title">
+    <li role="presentation" class="active"><a href="#">最新职位</a></li>
+</ul>
+
+<div class="job-list">
+    {% for job in newest_jobs %}
+        {{ render_job(job) }}
+    {% endfor %}
 </div>
 
-{{ render_pagination(pagination, 'front.index') }}
+<p class="list-more">
+<a href="{{ url_for('job.index') }}" class="btn btn-success btn-lg list-more-btn">查看更多</a>
+</p>
+
+<ul class="nav nav-tabs list-title">
+    <li role="presentation" class="active"><a href="#">最新公司</a></li>
+</ul>
+
+<div class="company-list">
+    {% for company in newest_companies %}
+        {{ render_company(company) }}
+    {% endfor %}
+</div>
+
+<p class="list-more">
+<a href="{{ url_for('company.index') }}" class="btn btn-success btn-lg list-more-btn">查看更多</a>
+</p>
 {% endbody %}
